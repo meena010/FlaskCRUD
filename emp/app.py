@@ -6,10 +6,17 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.secret_key = "app"
 
-app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://root:root@localhost:8889/empdb'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://root:''@localhost/empdb'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+@app.route('/')
+def index():
+    return render_template("index.html")
+
+
 db = SQLAlchemy(app)
+app.app_context().push()
+
 
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -23,11 +30,5 @@ class Data(db.Model):
         self.phone = phone
 
 
-
-
-@app.route('/')
-def index():
-    return render_template("index.html")
-
 if __name__ == "__main__":
-    app.run(debug=True,port=5000)
+    app.run(host="localhost", port=8080, debug=True)
